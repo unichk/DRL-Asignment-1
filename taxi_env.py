@@ -1,5 +1,6 @@
 import gym
 import importlib.util
+import gym.spaces
 import numpy as np
 import random
 import time
@@ -20,8 +21,8 @@ class TaxiEnv(gym.Env):
         self.passenger_loc, self.destination = random.choices(self.locs, k = 2)
         self.obstacles = set(random.choices(self.all_cells, k = random.randint(0, int(0.4 * self.grid_size * self.grid_size)))) - set(self.locs)
 
-        self.taxi_row = random.randint(0, self.grid_size)
-        self.taxi_col = random.randint(0, self.grid_size)
+        self.taxi_row = random.randint(0, self.grid_size - 1)
+        self.taxi_col = random.randint(0, self.grid_size - 1)
         self.current_fuel = self.fuel_limit
         self.passenger_picked_up = False
         return self.get_state(), {}
@@ -71,8 +72,8 @@ class TaxiEnv(gym.Env):
                 if self.current_fuel <= 0:
                     return self.get_state(), reward -10, False, True, {}
                 return self.get_state(), reward, False, False, {}
-            reward = 0
-
+        
+        reward = 0
         self.taxi_row, self.taxi_col = taxi_row, taxi_col = next_row, next_col
 
         if action == 4:
@@ -94,9 +95,10 @@ class TaxiEnv(gym.Env):
             return self.get_state(), reward -10.1, False, True, {}  
         return self.get_state(), reward - 0.1, False, False, {}
 
-    def render_env(self, taxi_pos, action = None, reward = None, fuel = None):
+    def render_env(self, taxi_pos, action = None, reward = None):
         print(f"action: {self.get_action_name(action)}")
         print(f"{reward = }")
+        print(f"fuel = {self.current_fuel}")
         
         grid = np.full((self.grid_size, self.grid_size), '.')
         for obstacle in self.obstacles:
@@ -112,7 +114,10 @@ class TaxiEnv(gym.Env):
             grid[taxi_pos] = 'T'
         print("\n".join(" ".join(s) for s in grid))
         clear_output(wait = True)
-        time.sleep(0.2)
+        time.sleep(0.01)
+
+    def render(self, action = None, reward = None):
+        self.render_env((self.taxi_row, self.taxi_col), action, reward)
 
     def get_action_name(self, action):
         """Returns a human-readable action name."""
@@ -145,7 +150,7 @@ def run_agent(agent_file, env_config, render=False):
 
         if render:
             env.render_env((taxi_row, taxi_col),
-                           action = action, reward = reward, fuel = env.current_fuel)
+                           action = action, reward = reward)
 
     print(f"Agent Finished in {step_count} steps, Score: {total_reward}")
     return total_reward

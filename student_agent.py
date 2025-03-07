@@ -3,6 +3,15 @@ import numpy as np
 import pickle
 import random
 import gym
+import torch
+import torch.nn as nn
+import torch.distributions as dis
+from tools import *
+
+policy = nn.Sequential(
+    nn.Linear(13, 6)
+)
+policy.load_state_dict(torch.load("policy", weights_only = True))
 
 def get_action(obs):
     
@@ -12,5 +21,8 @@ def get_action(obs):
     #       To prevent crashes, implement a fallback strategy for missing keys. 
     #       Otherwise, even if your agent performs well in training, it may fail during testing.
 
+    state = torch.tensor(get_state(obs), dtype = torch.float)
+    probs = nn.functional.softmax(policy(state), dim = 0)
+    m = dis.Categorical(probs).sample()
 
-    return random.choice([0, 1, 2, 3, 4, 5])
+    return m.item()
