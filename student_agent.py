@@ -1,5 +1,7 @@
-import sys
-print("Python version:", sys.version)
+import pkg_resources
+
+installed_packages = [p.project_name for p in pkg_resources.working_set]
+print("Installed packages:", installed_packages)
 # Remember to adjust your student ID in meta.xml
 import numpy as np
 import pickle
