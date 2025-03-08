@@ -1,3 +1,5 @@
+import sys
+print("Python version:", sys.version)
 # Remember to adjust your student ID in meta.xml
 import numpy as np
 import pickle
