@@ -1,4 +1,4 @@
 tqdm
 requests
 argparse
-torch
+torchvision @ https://download.pytorch.org/whl/cpu
