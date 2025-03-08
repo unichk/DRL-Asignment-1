@@ -26,6 +26,7 @@ jobs:
     - name: 2. Installing dependencies
       run: |
         pip install gym
+        pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
         pip install -r requirements.txt
 
     - name: 3. Grant execution permission to eval.bin
