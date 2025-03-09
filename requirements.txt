@@ -1,5 +1,3 @@
 tqdm
 requests
 argparse
---find-links https://download.pytorch.org/whl/torch_stable.html
-torchvision
