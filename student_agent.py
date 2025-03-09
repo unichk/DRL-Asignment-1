@@ -9,7 +9,9 @@ import torch.distributions as dis
 from tools import *
 
 policy = nn.Sequential(
-    nn.Linear(13, 6)
+    nn.Linear(13, 6),
+    nn.ReLU(),
+    nn.Linear(6, 6)
 )
 policy.load_state_dict(torch.load("policy", weights_only = True))
 print("model loaded")
