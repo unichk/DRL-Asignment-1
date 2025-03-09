@@ -12,6 +12,7 @@ policy = nn.Sequential(
     nn.Linear(13, 6)
 )
 policy.load_state_dict(torch.load("policy", weights_only = True))
+print("model loaded")
 
 def get_action(obs):
     
